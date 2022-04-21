@@ -1,12 +1,13 @@
 package model.dao;
 
+import db.DB;
 import model.dao.impl.SellerDaoJDBC;
 
 public class DaoFactory { //"Fctory" é uma Classe auxiliar responsável por 
 						//instanciar os meus DAOs.	
 	
 	public static SellerDao createrSellerDao() {
-		return new SellerDaoJDBC();
+		return new SellerDaoJDBC(DB.getConnection());
 	}/* operação estática para instanciar os DAOs. O "createrSellerDao()" 
 	têm que retornar um SellerDao. Dessa forma a classe "DaoFactory" vai expor 
 	um método que retorna o tipo da interface --> "SellerDao"; 
