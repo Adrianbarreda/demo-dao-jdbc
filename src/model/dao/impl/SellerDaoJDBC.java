@@ -68,17 +68,8 @@ public class SellerDaoJDBC implements SellerDao{
 			if (rs.next()) {/*O if é para textar se veio algum resultado. 
 			Se "rs" não retorno nenhum registro o "rs.next()=false" vou pular 
 			o "if" e retornar nullo*/
-				Department dep = new Department();/*variavél temporária*/
-				dep.setId(rs.getInt("DepartmentId"));/*pegamos o Id do Depart.*/
-				dep.setName(rs.getString("DepName"));
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setBirthDate(rs.getDate("BirthDate"));				
-				obj.setDepartment(dep);/*Não é DerpartmentId é uma associação 
-				de objeto por isso é "dep"*/
+				Department dep = instantiateDepartment(rs);
+				Seller obj = instantiateSeller(rs, dep);
 				return obj;
 			}
 			return null;/*Não existe nenhum vendendor com esse "id"*/					
@@ -89,7 +80,7 @@ public class SellerDaoJDBC implements SellerDao{
 		}
 		
 		finally {
-			DB.closeStatement(st);
+			DB.closeStatement(st); /*fechar os meus recursos o "st" e o "rs"*/
 			DB.closeResultSet(rs);
 		}
 		/*IMPORTANTE: O "ResultSet" traz os dados no formato de tabela, 
@@ -102,6 +93,25 @@ public class SellerDaoJDBC implements SellerDao{
 		 * Na programação OO, mesmo buscando os dados no BD na forma de tabela, 
 		 * na memoria do PC vou querer tener os objetos associados-instanciados 
 		 * em memoria*/
+	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		Seller obj = new Seller(); /*Código para instanciar vendendor*/
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setBirthDate(rs.getDate("BirthDate"));				
+		obj.setDepartment(dep);/*Não é DerpartmentId é uma associação 
+		de objeto por isso é "dep"*/
+		return obj;
+	}
+
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		Department dep = new Department();
+		dep.setId(rs.getInt("DepartmentId"));
+		dep.setName(rs.getString("DepName"));
+		return dep;	
 	}
 
 	@Override

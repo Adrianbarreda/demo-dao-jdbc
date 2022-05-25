@@ -13,8 +13,8 @@ public class Program {
 		a implementação só conhece a interface. É também uma forma de fazer uma 
 		injeção de dependencia sem explicitar a implementação.*/
 		
-		Seller seller = sellerDao.findById(3);
-		
+		System.out.println("=== TEST 1: seller findById ===");
+		Seller seller = sellerDao.findById(3);		
 		System.out.println(seller);
 
 	}
